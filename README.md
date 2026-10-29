@@ -94,7 +94,8 @@ This repository studies the performance of **a complete HTTPS workload** while e
 
 ## 🧭 Inside the lab
 
-<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/ddf5d8a7-1f62-4966-844c-57e38f0972b4" />
+<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/0489bf32-96b6-47ad-9431-a924041c39d6" />
+
 
 
 *The diagram illustrates the experimental workflow and intended scenario matrix. Cryptographic profile details in the diagram must be audited against the actual server certificates and negotiated TLS parameters before being treated as verified implementation facts.*
