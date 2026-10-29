@@ -92,35 +92,7 @@ The test suite therefore contains **25 individual 120-second measurements** per 
 
 ## Seeing beyond HTTP
 
-```text
-                    ┌──────────────────────────┐
-                    │  Load generator (wrk)    │
-                    │  8 threads / 50 clients  │
-                    └─────────────┬────────────┘
-                                  │ Fresh HTTPS connections
-                                  ▼
-                    ┌──────────────────────────┐
-                    │  RHEL 9.8 HTTPS server   │
-                    │  Apache + OpenSSL        │
-                    │  Classical / PQC TLS     │
-                    └─────────────┬────────────┘
-                                  │
-                      ┌───────────┴───────────┐
-                      ▼                       ▼
-            ┌──────────────────┐    ┌──────────────────┐
-            │ eBPF TLS tracer  │    │ Node exporter    │
-            │ SSL_do_handshake │    │ CPU utilization  │
-            └─────────┬────────┘    └─────────┬────────┘
-                      └───────────┬───────────┘
-                                  ▼
-                         ┌────────────────┐
-                         │ Prometheus     │
-                         └────────┬───────┘
-                                  ▼
-                         ┌────────────────┐
-                         │ Grafana / plots│
-                         └────────────────┘
-```
+<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/972ddc28-f4b4-4b21-963a-e4e3e7583194" />
 
 We examine complementary signals rather than relying on one number:
 
