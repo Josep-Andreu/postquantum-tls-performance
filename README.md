@@ -1,4 +1,3 @@
-[README-post-quantum-tls.md](https://github.com/user-attachments/files/34106874/README-post-quantum-tls.md)
 <div align="center">
 
 # 🔐 Post-Quantum TLS: Beyond the Handshake
@@ -20,7 +19,7 @@
 
 ---
 
-## ⚡ The results, first
+## The results, first
 
 > **In our CPU-saturated HTTPS testbed, the post-quantum TLS profiles delivered approximately 21–26% fewer requests per second than the classical A.2 baseline.**
 >
@@ -95,7 +94,8 @@ This repository studies the performance of **a complete HTTPS workload** while e
 
 ## 🧭 Inside the lab
 
-![End-to-end TLS benchmarking architecture and workflow](assets/tls-benchmark-workflow.png)
+<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/ddf5d8a7-1f62-4966-844c-57e38f0972b4" />
+
 
 *The diagram illustrates the experimental workflow and intended scenario matrix. Cryptographic profile details in the diagram must be audited against the actual server certificates and negotiated TLS parameters before being treated as verified implementation facts.*
 
