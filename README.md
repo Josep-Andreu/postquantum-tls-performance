@@ -92,7 +92,8 @@ The test suite therefore contains **25 individual 120-second measurements** per 
 
 ## Seeing beyond HTTP
 
-<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/972ddc28-f4b4-4b21-963a-e4e3e7583194" />
+<img width="1774" height="887" alt="image" src="https://github.com/user-attachments/assets/1cef68e4-05da-4cf1-9d52-e6de85672aae" />
+
 
 We examine complementary signals rather than relying on one number:
 
