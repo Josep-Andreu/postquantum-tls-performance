@@ -1,0 +1,44 @@
+#!/usr/bin/env bpftrace
+
+BEGIN
+{
+    printf("READY\n");
+}
+
+uprobe:/usr/lib64/libssl.so.3:SSL_do_handshake
+/comm == "httpd"/
+{
+    @start_ns[tid, arg0] = nsecs;
+    @ssl_ptr[tid] = arg0;
+}
+
+uretprobe:/usr/lib64/libssl.so.3:SSL_do_handshake
+/@ssl_ptr[tid]/
+{
+    $ssl = @ssl_ptr[tid];
+    $duration_ns = nsecs - @start_ns[tid, $ssl];
+
+    printf(
+        "HANDSHAKE pid=%d tid=%d duration_ns=%llu result=%d\n",
+        pid,
+        tid,
+        $duration_ns,
+        retval
+    );
+
+    delete(@start_ns[tid, $ssl]);
+    delete(@ssl_ptr[tid]);
+}
+
+tracepoint:sched:sched_process_exit
+/@ssl_ptr[tid]/
+{
+    $ssl = @ssl_ptr[tid];
+    delete(@start_ns[tid, $ssl]);
+    delete(@ssl_ptr[tid]);
+}
+
+END
+{
+    printf("STOPPED\n");
+}

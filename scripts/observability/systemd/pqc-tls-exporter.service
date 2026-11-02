@@ -1,0 +1,23 @@
+[Unit]
+Description=PQC TLS eBPF Prometheus Exporter
+Documentation=Internal TLS post-quantum observability
+After=network-online.target httpd.service
+Wants=network-online.target
+Requires=httpd.service
+
+[Service]
+Type=simple
+ExecStart=/root/pqc-observability/venv/bin/python /root/pqc-observability/exporter/tls_exporter.py
+WorkingDirectory=/root/pqc-observability
+Restart=on-failure
+RestartSec=3
+TimeoutStopSec=15
+Environment=PYTHONUNBUFFERED=1
+Environment=BPFTRACE_STRLEN=128
+StandardOutput=journal
+StandardError=journal
+NoNewPrivileges=no
+PrivateTmp=yes
+
+[Install]
+WantedBy=multi-user.target
