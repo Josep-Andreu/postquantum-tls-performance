@@ -1,0 +1,11 @@
+openssl_conf = openssl_init
+
+[openssl_init]
+ssl_conf = ssl_sect
+
+[ssl_sect]
+client = client_tls
+
+[client_tls]
+SignatureAlgorithms = MLDSA87
+Groups = MLKEM1024

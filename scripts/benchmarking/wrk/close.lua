@@ -1,0 +1,1 @@
+wrk.headers["Connection"] = "close"
