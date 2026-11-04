@@ -1,6 +1,6 @@
 # TLS Benchmark Orchestration
 
-This directory contains `run-round.sh`, the script used to automate the classical and post-quantum TLS performance benchmarks described in the accompanying Red Hat Developer article.
+This directory contains `run-rounds.sh`, the script used to automate the classical and post-quantum TLS performance benchmarks described in the accompanying Red Hat Developer article.
 
 The script executes five TLS profiles in a predefined order that varies between rounds, helping reduce systematic time-order bias.
 
@@ -31,7 +31,7 @@ Configure the target server and local paths, then execute a round:
 ```bash
 WEB=web.lab.example.com \
 WRK=/usr/local/src/wrk \
-./run-round.sh 1
+./run-rounds.sh 1
 ```
 
 The script also supports the environment variables `BASE`, `SSH_TARGET`, `OPENSSL_MLDSA65`, and `OPENSSL_MLDSA87_MLKEM1024` to override their default values.
@@ -40,7 +40,7 @@ To execute all five rounds:
 
 ```bash
 for round in 1 2 3 4 5; do
-    ./run-round.sh "$round"
+    ./run-rounds.sh "$round"
 done
 ```
 
