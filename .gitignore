@@ -8,3 +8,7 @@ venv/
 *.key
 *.p12
 *.pfx
+
+# Python generated files
+__pycache__/
+*.pyc
