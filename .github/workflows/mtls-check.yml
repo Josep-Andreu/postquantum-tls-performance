@@ -1,0 +1,21 @@
+name: mTLS data consistency
+on:
+  push:
+    paths: ['mtls/**', '.github/workflows/mtls-check.yml']
+  pull_request:
+    paths: ['mtls/**', '.github/workflows/mtls-check.yml']
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python mtls/scripts/verify_data.py
+      - run: pip install -r mtls/requirements.txt
+      - run: python mtls/scripts/plot_from_csv.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: mtls-figures-generated
+          path: mtls/figures/generated/
