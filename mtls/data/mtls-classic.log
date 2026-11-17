@@ -1,0 +1,22 @@
+mTLS: client certificate loaded: /path/to/client-certs/client-ecdsa.crt
+
+=== TLS DIAGNOSTICS ===
+Protocol: TLSv1.3
+Cipher: TLS_AES_256_GCM_SHA384
+Negotiated group: secp384r1
+Server public key: EC
+=======================
+TLS handshake summary: full=114734 resumed=0 total=114734
+Running 2m test @ https://tls-server.example.invalid:13443/
+  8 threads and 50 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    27.89ms   29.78ms 392.55ms   87.30%
+    Req/Sec   119.67     26.16   212.00     68.87%
+  Latency Distribution
+     50%   18.64ms
+     75%   39.85ms
+     90%   64.07ms
+     99%  139.76ms
+  114706 requests in 2.00m, 415.69MB read
+Requests/sec:    955.14
+Transfer/sec:      3.46MB

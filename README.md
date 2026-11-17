@@ -77,7 +77,7 @@ Relative to `classic-a2`, the post-quantum profiles showed approximately **67–
 
 A separate [mTLS performance study](mtls/README.md) evaluates bidirectional ECDSA P-384 authentication with classical versus hybrid key establishment, and ML-DSA-65 authentication with hybrid key establishment. It records **9 additional 120-second runs** (3 per profile) and a run-level dataset with SVG previews. Under this particular CPU-saturated setup, Hybrid averaged **1,100.47 HTTP requests/s**, compared with **946.68** for the classical baseline (+16.25%), but had a **higher HTTP p99** (206.24 versus 161.25 ms). The study documents important experimental and reproducibility limitations.
 
-![mTLS throughput preview](mtls/figures/preview/01-throughput.svg)
+![mTLS throughput preview](mtls/figures/dark/01-mtls-throughput-dark.png)
 
 **[Full mTLS results and limitations](mtls/README.md)** · **[Data](mtls/data/runs.csv)** · **[Experiments planned for FOSDEM](mtls/docs/next-experiments.md)**
 
