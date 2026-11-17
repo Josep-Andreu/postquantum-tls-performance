@@ -1,0 +1,27 @@
+name: mTLS historical dataset validation
+on:
+  push:
+    paths:
+      - 'mtls/**'
+      - '.github/workflows/mtls-data.yml'
+  pull_request:
+    paths:
+      - 'mtls/**'
+      - '.github/workflows/mtls-data.yml'
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Validate published data consistency
+        run: python mtls/scripts/verify-mtls.py
+      - name: Set up Python plotting dependencies
+        run: pip install -r mtls/requirements.txt
+      - name: Rebuild the consolidated CSV and all eight figures
+        run: |
+          python mtls/scripts/consolidate-mtls.py
+          python mtls/scripts/plot-mtls-dark.py
+          python mtls/scripts/verify-mtls.py

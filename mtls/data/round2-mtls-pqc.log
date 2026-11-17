@@ -1,0 +1,22 @@
+mTLS: client certificate loaded: /path/to/client-certs/client-mldsa.crt
+
+=== TLS DIAGNOSTICS ===
+Protocol: TLSv1.3
+Cipher: TLS_AES_256_GCM_SHA384
+Negotiated group: X25519MLKEM768
+Server public key: ML-DSA-65
+=======================
+TLS handshake summary: full=122613 resumed=0 total=122613
+Running 2m test @ https://tls-server.example.invalid:14443/
+  8 threads and 50 connections
+  Thread Stats   Avg      Stdev     Max   +/- Stdev
+    Latency    26.61ms   34.35ms 459.25ms   88.38%
+    Req/Sec   127.91     32.12   242.00     69.77%
+  Latency Distribution
+     50%   14.35ms
+     75%   36.86ms
+     90%   65.72ms
+     99%  162.91ms
+  122578 requests in 2.00m, 444.22MB read
+Requests/sec:   1020.67
+Transfer/sec:      3.70MB
