@@ -73,6 +73,16 @@ Relative to `classic-a2`, the post-quantum profiles showed approximately **67–
 
 ---
 
+## 🔐 Mutual TLS extension (October 2026)
+
+A separate [mTLS performance study](mtls/README.md) evaluates bidirectional ECDSA P-384 authentication with classical versus hybrid key establishment, and ML-DSA-65 authentication with hybrid key establishment. It records **9 additional 120-second runs** (3 per profile) and a run-level dataset with SVG previews. Under this particular CPU-saturated setup, Hybrid averaged **1,100.47 HTTP requests/s**, compared with **946.68** for the classical baseline (+16.25%), but had a **higher HTTP p99** (206.24 versus 161.25 ms). The study documents important experimental and reproducibility limitations.
+
+![mTLS throughput preview](mtls/figures/preview/01-throughput.svg)
+
+**[Full mTLS results and limitations](mtls/README.md)** · **[Data](mtls/data/runs.csv)** · **[Experiments planned for FOSDEM](mtls/docs/next-experiments.md)**
+
+---
+
 ## 🔎 Why this matters
 
 Post-quantum cryptography is becoming available in mainstream TLS stacks. But a microbenchmark of a signature or key-encapsulation operation cannot, by itself, predict application behavior.
@@ -84,7 +94,7 @@ This repository studies the performance of **a complete HTTPS workload** while e
 - **Host perspective:** CPU utilization collected through Prometheus and node exporter.
 - **Experimental perspective:** repeated runs, varied execution order, timestamped windows, and traceable CSV outputs.
 
-**Scope:** classical and post-quantum **server-side HTTPS/TLS**. This campaign excludes mutual TLS, proxies, and Kubernetes.
+**Scope:** This **November 4 HTTPS campaign** excludes mutual TLS, proxies and Kubernetes. The repository also includes a **separate [October mutual-TLS (mTLS) campaign](mtls/README.md)**; those measurements must not be pooled with the HTTPS campaign.
 
 ---
 
