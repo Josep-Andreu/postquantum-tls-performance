@@ -1,0 +1,18 @@
+MTLS FOUR-PROFILE CAMPAIGN — FIGURE SUMMARY
+
+Same visual style as original mtls/scripts/plot-mtls-dark.py
+
+Profile | RPS OFF mean | RPS OFF SD | Handshake elapsed ON mean (ms) | Observed OFF-to-ON RPS penalty (%)
+--- | ---: | ---: | ---: | ---:
+mtls-classic | 912.68 | 4.69 | 42.403 | 4.26
+mtls-x25519 | 1108.71 | 13.18 | 32.959 | 5.37
+mtls-hybrid | 1076.88 | 11.99 | 33.708 | 4.64
+mtls-pqc | 1010.50 | 6.85 | 39.848 | 5.91
+
+Cautions:
+- wrk HTTP latency excludes TLS connection setup.
+- eBPF elapsed starts at the first server-observed SSL_do_handshake call.
+- ON vs OFF includes exporter activity, parsing and polling.
+- CPU busy is system-level and not isolated crypto CPU time.
+- Confidence interval shown in figure 07 is a t-based paired interval (n=5).
+- No server addresses, internal hostnames, keys or certificate data are included.

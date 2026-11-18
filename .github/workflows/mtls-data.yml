@@ -1,4 +1,4 @@
-name: mTLS historical dataset validation
+name: Validate current mTLS campaign
 on:
   push:
     paths:
@@ -9,19 +9,21 @@ on:
       - 'mtls/**'
       - '.github/workflows/mtls-data.yml'
 jobs:
-  validate:
+  offline-validation:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Validate published data consistency
-        run: python mtls/scripts/verify-mtls.py
-      - name: Set up Python plotting dependencies
+      - name: Check dataset internal consistency
+        run: python3 mtls/scripts/verify-campaign.py
+      - name: Install plotting dependencies
         run: pip install -r mtls/requirements.txt
-      - name: Rebuild the consolidated CSV and all eight figures
+      - name: Rebuild 8 offline figures (do not modify committed server originals)
         run: |
-          python mtls/scripts/consolidate-mtls.py
-          python mtls/scripts/plot-mtls-dark.py
-          python mtls/scripts/verify-mtls.py
+          python3 mtls/scripts/plot-mtls-campaign-dark.py \
+            --csv mtls/data/results.csv \
+            --out "$RUNNER_TEMP/mtls-plots"
+          test "$(find "$RUNNER_TEMP/mtls-plots" -name '*.png' | wc -l)" -eq 8
+          test "$(find "$RUNNER_TEMP/mtls-plots" -name '*.svg' | wc -l)" -eq 8
