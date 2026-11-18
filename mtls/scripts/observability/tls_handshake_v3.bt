@@ -1,0 +1,55 @@
+#!/usr/bin/env bpftrace
+/*
+ * mTLS observer v3: server-observed elapsed between first SSL_do_handshake()
+ * call and successful completion. Requires the matching COMPLETE-aware
+ * Prometheus exporter. Illustrative RHEL/OpenSSL 3 library path.
+ */
+BEGIN { printf("READY\n"); }
+
+uprobe:/usr/lib64/libssl.so.3:SSL_do_handshake /comm == "httpd"/
+{
+    $entry_ns = nsecs;
+    @call_start_ns[tid] = $entry_ns;
+    @current_ssl[tid] = arg0;
+    if (!has_key(@first_start_ns, (pid, arg0))) {
+        @first_start_ns[pid, arg0] = $entry_ns;
+    }
+}
+
+uretprobe:/usr/lib64/libssl.so.3:SSL_do_handshake
+/has_key(@call_start_ns, tid) && has_key(@current_ssl, tid)/
+{
+    $ssl = @current_ssl[tid];
+    $end_ns = nsecs;
+    $call_ns = $end_ns - @call_start_ns[tid];
+
+    if (retval == 1) {
+        if (has_key(@first_start_ns, (pid, $ssl))) {
+            $elapsed_ns = $end_ns - @first_start_ns[pid, $ssl];
+            printf("COMPLETE pid=%d tid=%d call_ns=%llu elapsed_ns=%llu result=1\n",
+                   pid, tid, $call_ns, $elapsed_ns);
+            delete(@first_start_ns[pid, $ssl]);
+        }
+    } else {
+        printf("CALL pid=%d tid=%d duration_ns=%llu result=%d\n",
+               pid, tid, $call_ns, retval);
+    }
+    delete(@call_start_ns[tid]);
+    delete(@current_ssl[tid]);
+}
+
+uprobe:/usr/lib64/libssl.so.3:SSL_free /comm == "httpd"/
+{
+    if (has_key(@first_start_ns, (pid, arg0))) {
+        printf("ABORT pid=%d tid=%d\n", pid, tid);
+        delete(@first_start_ns[pid, arg0]);
+    }
+}
+
+tracepoint:sched:sched_process_exit
+{
+    if (has_key(@call_start_ns, tid)) { delete(@call_start_ns[tid]); }
+    if (has_key(@current_ssl, tid)) { delete(@current_ssl[tid]); }
+}
+
+END { printf("STOPPED\n"); }

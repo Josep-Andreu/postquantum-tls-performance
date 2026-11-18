@@ -73,13 +73,15 @@ Relative to `classic-a2`, the post-quantum profiles showed approximately **67–
 
 ---
 
-## 🔐 Mutual TLS extension (October 2026)
+## 🔐 Mutual TLS extension (November 2026)
 
-A separate [mTLS performance study](mtls/README.md) evaluates bidirectional ECDSA P-384 authentication with classical versus hybrid key establishment, and ML-DSA-65 authentication with hybrid key establishment. It records **9 additional 120-second runs** (3 per profile) and a run-level dataset with SVG previews. Under this particular CPU-saturated setup, Hybrid averaged **1,100.47 HTTP requests/s**, compared with **946.68** for the classical baseline (+16.25%), but had a **higher HTTP p99** (206.24 versus 161.25 ms). The study documents important experimental and reproducibility limitations.
+The updated [peer-verified mTLS study](mtls/README.md) uses **four profiles, five 120-second rounds per profile, and separate eBPF ON/OFF campaigns (40 runs)**. It adds a controlled X25519 comparator with matching ECDSA P-384 authentication and verifies client/server certificates and completed handshake counts.
 
-![mTLS throughput preview](mtls/figures/dark/01-mtls-throughput-dark.png)
+With the observer **OFF**, Hybrid X25519MLKEM768 achieved **1,076.88 requests/s**, compared with **1,108.71** for the X25519 control (a **2.87% reduction** in this CPU-saturated environment). The earlier October mTLS pilot used a client that did not verify the server certificate; it is superseded by this validated campaign and remains accessible in Git history.
 
-**[Full mTLS results and limitations](mtls/README.md)** · **[Data](mtls/data/runs.csv)** · **[Experiments planned for FOSDEM](mtls/docs/next-experiments.md)**
+![mTLS validated throughput](mtls/figures/dark/01-mtls-throughput-dark.png)
+
+**[Full mTLS results, figures and limitations](mtls/README.md)** · **[40-run dataset](mtls/data/results.csv)** · **[Instrumentation methodology](mtls/docs/observability.md)**
 
 ---
 
@@ -94,7 +96,7 @@ This repository studies the performance of **a complete HTTPS workload** while e
 - **Host perspective:** CPU utilization collected through Prometheus and node exporter.
 - **Experimental perspective:** repeated runs, varied execution order, timestamped windows, and traceable CSV outputs.
 
-**Scope:** This **November 4 HTTPS campaign** excludes mutual TLS, proxies and Kubernetes. The repository also includes a **separate [October mutual-TLS (mTLS) campaign](mtls/README.md)**; those measurements must not be pooled with the HTTPS campaign.
+**Scope:** This **November 4 HTTPS campaign** excludes mutual TLS, proxies and Kubernetes. The repository also includes a **separate [November 2026 peer-verified mutual-TLS (mTLS) campaign](mtls/README.md)**; those measurements must not be pooled with the HTTPS campaign.
 
 ---
 
