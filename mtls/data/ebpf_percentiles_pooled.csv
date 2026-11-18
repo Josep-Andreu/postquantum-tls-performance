@@ -1,0 +1,5 @@
+profile,handshakes,p50_ms,p90_ms,p95_ms,p99_ms,source,aggregation
+mtls-classic,524879,26.2495,95.5955,133.2335,231.2387,tls_handshake_full_elapsed_seconds_bucket,pooled_ON_5_runs
+mtls-x25519,630288,17.3082,77.6909,110.3556,212.4677,tls_handshake_full_elapsed_seconds_bucket,pooled_ON_5_runs
+mtls-hybrid,616768,17.9867,79.3018,112.3309,213.5251,tls_handshake_full_elapsed_seconds_bucket,pooled_ON_5_runs
+mtls-pqc,571092,23.3181,94.3140,131.8070,230.2363,tls_handshake_full_elapsed_seconds_bucket,pooled_ON_5_runs
