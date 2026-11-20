@@ -1,5 +1,19 @@
 #!/usr/bin/env python3
 
+# Copyright 2026 Josep Andreu Font & José Ángel de Bustos Pérez
+#   Author(s):  Josep Andreu Font <jsp.andreu@gmail.com>
+#               José Ángel de Bustos Pérez <jadebustos@gmail.com>
+#
+# This is free software: you can redistribute it and/or modify it under the terms of 
+# the GNU General Public License v3 as published by the Free Software Foundation.
+# This workshop is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; 
+# without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. 
+# See the GNU General Public License v3 for more details.
+
+# You should have received a copy of the GNU General Public License v3 along with this software.
+# If not, see https://www.gnu.org/licenses/gpl-3.0.en.htm
+
+import argparse
 import csv
 import statistics as stats
 from collections import defaultdict
@@ -9,11 +23,25 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import numpy as np
-from matplotlib.patches import Patch
+from matplotlib.collections import LineCollection
+from matplotlib.legend_handler import HandlerBase
+from matplotlib.patches import Patch, Rectangle
+
+parser = argparse.ArgumentParser(
+    description="Generate the stability campaign figures with a white or dark background."
+)
+parser.add_argument(
+    "theme",
+    nargs="?",
+    choices=["white", "dark"],
+    default="dark",
+    help="Figure background: 'white' or 'dark' (default: dark)",
+)
+THEME = parser.parse_args().theme
 
 BASE = Path(__file__).resolve().parent
 DATA = BASE.parent / "benchmarks" / "2026-11-04-stability"
-OUT = BASE / "figures" / "dark"
+OUT = BASE / "figures" / THEME
 OUT.mkdir(parents=True, exist_ok=True)
 
 PROFILES = [
@@ -32,14 +60,28 @@ LABELS = [
     "PQC\nC.1",
 ]
 
-BG = "#0B111A"
-FG = "#F5F7FA"
-MUTED = "#A0AEC0"
-GRID = "#293746"
+if THEME == "dark":
+    BG = "#0B111A"
+    FG = "#F5F7FA"
+    MUTED = "#A0AEC0"
+    GRID = "#293746"
+else:
+    BG = "#FFFFFF"
+    FG = "#0B111A"
+    MUTED = "#4A5568"
+    GRID = "#D5DCE4"
+BOX_FG = "#F5F7FA"  # text inside the dark red delta boxes (figure 1)
 BLUE = "#249BFA"
 CORAL = "#FF624D"
 
 COLORS = [BLUE, BLUE, CORAL, CORAL, CORAL]
+
+# Diagonal stripes on the classical profiles, drawn in the background color.
+# They are drawn as real lines clipped to each bar instead of a matplotlib
+# hatch, because PDF hatch patterns are not rendered by every PDF viewer.
+HATCHED = [True, True, False, False, False]
+HATCH_SPACING_IN = 0.18   # distance between stripes, in inches
+HATCH_LINEWIDTH = 1.5     # points
 
 # November 4, 2026 stability campaign. Copy both stability CSVs beside this script.
 import math
@@ -136,6 +178,55 @@ plt.rcParams.update({
     "svg.fonttype": "none",
 })
 
+def hatch_bars(ax, bars, hatched, alpha=None):
+    """Draw diagonal stripes (background color) over the selected bars."""
+    fig = ax.figure
+    w, h = fig.get_size_inches()
+    n = int((w + h) / HATCH_SPACING_IN) + 2
+    segments = [[(k * HATCH_SPACING_IN - h, 0), (k * HATCH_SPACING_IN, h)]
+                for k in range(n)]
+    for bar, flag in zip(bars, hatched):
+        if not flag:
+            continue
+        lines = LineCollection(
+            segments,
+            colors=BG,
+            linewidths=HATCH_LINEWIDTH,
+            alpha=alpha,
+            transform=fig.dpi_scale_trans,
+            zorder=bar.get_zorder() + 0.1,
+        )
+        ax.add_collection(lines, autolim=False)
+        lines.set_clip_path(bar)  # after add_collection, which resets the clip
+
+
+class HatchedPatchHandler(HandlerBase):
+    """Legend handler that draws a patch with the same diagonal stripes."""
+
+    def create_artists(self, legend, orig_handle, xdescent, ydescent,
+                       width, height, fontsize, trans):
+        rect = Rectangle(
+            (-xdescent, -ydescent), width, height,
+            facecolor=orig_handle.get_facecolor(),
+            edgecolor="none",
+            transform=trans,
+        )
+        step = height / 2.2
+        segments = []
+        x = -xdescent - height
+        while x < -xdescent + width:
+            segments.append([(x, -ydescent), (x + height, -ydescent + height)])
+            x += step
+        lines = LineCollection(
+            segments,
+            colors=BG,
+            linewidths=HATCH_LINEWIDTH * 0.8,
+            transform=trans,
+        )
+        lines.set_clip_path(rect)
+        return [rect, lines]
+
+
 def make_figure(title, subtitle, ylabel, ylim=None):
     fig, ax = plt.subplots(figsize=(16, 9))
 
@@ -183,6 +274,7 @@ def footer(fig, text):
     )
 
 def save(fig, name):
+    name = name.replace("-dark", f"-{THEME}")
     for ext in ("png", "pdf", "svg"):
         fig.savefig(
             OUT / f"{name}.{ext}",
@@ -228,9 +320,12 @@ bars = ax.bar(
     },
 )
 
+hatch_bars(ax, bars, HATCHED)
+
 ax.set_xticks(x, LABELS)
 ax.legend(
     handles=legend,
+    handler_map={legend[0]: HatchedPatchHandler()},
     loc="upper right",
     frameon=False,
     labelcolor=FG,
@@ -263,7 +358,7 @@ for i, (bar, value, sd) in enumerate(zip(bars, means, stds)):
             f"{delta:.1f}%\nvs. P-384",
             ha="center",
             va="center",
-            color=FG,
+            color=BOX_FG,
             fontsize=14,
             fontweight="bold",
             linespacing=1.5,
@@ -305,7 +400,7 @@ metrics = [
 for j, (metric, quantile, alpha) in enumerate(metrics):
     means, stds = summary(metric)
 
-    ax.bar(
+    bars = ax.bar(
         x + (j - 1) * width,
         means,
         width=width,
@@ -319,6 +414,7 @@ for j, (metric, quantile, alpha) in enumerate(metrics):
         },
         label=quantile,
     )
+    hatch_bars(ax, bars, HATCHED, alpha=alpha)
 
 ax.set_xticks(x, LABELS)
 
@@ -361,6 +457,7 @@ bars = ax.bar(
         "elinewidth": 1.5,
     },
 )
+hatch_bars(ax, bars, HATCHED)
 
 ax.set_xticks(x, LABELS)
 
@@ -531,6 +628,7 @@ bars = ax.bar(
     width=0.60,
     color=COLORS[1:],
 )
+hatch_bars(ax, bars, HATCHED[1:])
 
 ax.set_xticks(
     np.arange(4),
@@ -575,7 +673,7 @@ for j, (metric, label, alpha) in enumerate([
 ]):
     means, stds = summary(metric)
 
-    ax.bar(
+    bars = ax.bar(
         x + (j - 0.5) * width,
         means,
         width=width,
@@ -586,6 +684,7 @@ for j, (metric, label, alpha) in enumerate([
         error_kw={"ecolor": FG},
         label=label,
     )
+    hatch_bars(ax, bars, HATCHED, alpha=alpha)
 
 ax.set_xticks(x, LABELS)
 
