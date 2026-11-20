@@ -39,7 +39,7 @@
 
 ### HTTP throughput under sustained load
 
-![TLS throughput under sustained load](figures/2026-11-04-stability/01-throughput-dark.png)
+![TLS throughput under sustained load](figures/2026-11-04-stability/dark/01-throughput-dark.png)
 
 *Mean HTTP requests per second across five independent runs; error bars show ±1 standard deviation.*
 
