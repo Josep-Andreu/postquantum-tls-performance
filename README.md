@@ -79,7 +79,7 @@ The updated [peer-verified mTLS study](mtls/README.md) uses **four profiles, fiv
 
 With the observer **OFF**, Hybrid X25519MLKEM768 achieved **1,076.88 requests/s**, compared with **1,108.71** for the X25519 control (a **2.87% reduction** in this CPU-saturated environment). The earlier October mTLS pilot used a client that did not verify the server certificate; it is superseded by this validated campaign and remains accessible in Git history.
 
-![mTLS validated throughput](mtls/figures/dark/dark/01-mtls-throughput-dark.png)
+![mTLS validated throughput](mtls/figures/dark/dark/dark/01-mtls-throughput-dark.png)
 
 **[Full mTLS results, figures and limitations](mtls/README.md)** · **[40-run dataset](mtls/data/results.csv)** · **[Instrumentation methodology](mtls/docs/observability.md)**
 
