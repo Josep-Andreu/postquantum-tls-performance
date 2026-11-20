@@ -51,11 +51,11 @@
 | `pqc-b1` | B.1 · post-quantum | 1,445.68 | 19.15 | −23.4% |
 | `pqc-c1` | C.1 · post-quantum | 1,424.17 | 42.19 | −24.6% |
 
-![Relative throughput reduction](figures/2026-11-04-stability/06-relative-throughput-dark.png)
+![Relative throughput reduction](figures/2026-11-04-stability/dark/06-relative-throughput-dark.png)
 
 ### Beyond throughput: TLS-call latency and CPU
 
-![OpenSSL handshake-call latency](figures/2026-11-04-stability/02-ebpf-latency-dark.png)
+![OpenSSL handshake-call latency](figures/2026-11-04-stability/dark/02-ebpf-latency-dark.png)
 
 *Pooled histogram estimates of successful `SSL_do_handshake()` call durations. These are not necessarily full TLS handshake durations or isolated cryptographic execution times.*
 
@@ -79,7 +79,7 @@ The updated [peer-verified mTLS study](mtls/README.md) uses **four profiles, fiv
 
 With the observer **OFF**, Hybrid X25519MLKEM768 achieved **1,076.88 requests/s**, compared with **1,108.71** for the X25519 control (a **2.87% reduction** in this CPU-saturated environment). The earlier October mTLS pilot used a client that did not verify the server certificate; it is superseded by this validated campaign and remains accessible in Git history.
 
-![mTLS validated throughput](mtls/figures/dark/01-mtls-throughput-dark.png)
+![mTLS validated throughput](mtls/figures/dark/dark/01-mtls-throughput-dark.png)
 
 **[Full mTLS results, figures and limitations](mtls/README.md)** · **[40-run dataset](mtls/data/results.csv)** · **[Instrumentation methodology](mtls/docs/observability.md)**
 
@@ -179,21 +179,21 @@ The November 4 stability campaign includes **seven measured figures**, available
 
 | Figure | Question answered | PNG |
 |:--|:--|:--|
-| `01-throughput-dark` | How many HTTPS requests/s can each profile sustain? | [View](figures/2026-11-04-stability/01-throughput-dark.png) |
-| `02-ebpf-latency-dark` | How does `SSL_do_handshake()` call duration change? | [View](figures/2026-11-04-stability/02-ebpf-latency-dark.png) |
-| `03-cpu-dark` | How busy is the server? | [View](figures/2026-11-04-stability/03-cpu-dark.png) |
-| `04-throughput-vs-p99-dark` | How do throughput and tail latency relate? | [View](figures/2026-11-04-stability/04-throughput-vs-p99-dark.png) |
-| `05-reproducibility-dark` | How stable are results across five runs? | [View](figures/2026-11-04-stability/05-reproducibility-dark.png) |
-| `06-relative-throughput-dark` | How does each profile compare with the baseline? | [View](figures/2026-11-04-stability/06-relative-throughput-dark.png) |
-| `07-wrk-latency-dark` | What HTTP latency does the client observe? | [View](figures/2026-11-04-stability/07-wrk-latency-dark.png) |
+| `01-throughput-dark` | How many HTTPS requests/s can each profile sustain? | [View](figures/2026-11-04-stability/dark/01-throughput-dark.png) |
+| `02-ebpf-latency-dark` | How does `SSL_do_handshake()` call duration change? | [View](figures/2026-11-04-stability/dark/02-ebpf-latency-dark.png) |
+| `03-cpu-dark` | How busy is the server? | [View](figures/2026-11-04-stability/dark/03-cpu-dark.png) |
+| `04-throughput-vs-p99-dark` | How do throughput and tail latency relate? | [View](figures/2026-11-04-stability/dark/04-throughput-vs-p99-dark.png) |
+| `05-reproducibility-dark` | How stable are results across five runs? | [View](figures/2026-11-04-stability/dark/05-reproducibility-dark.png) |
+| `06-relative-throughput-dark` | How does each profile compare with the baseline? | [View](figures/2026-11-04-stability/dark/06-relative-throughput-dark.png) |
+| `07-wrk-latency-dark` | What HTTP latency does the client observe? | [View](figures/2026-11-04-stability/dark/07-wrk-latency-dark.png) |
 
-![Server CPU utilization](figures/2026-11-04-stability/03-cpu-dark.png)
+![Server CPU utilization](figures/2026-11-04-stability/dark/03-cpu-dark.png)
 
-![Throughput versus p99 TLS call duration](figures/2026-11-04-stability/04-throughput-vs-p99-dark.png)
+![Throughput versus p99 TLS call duration](figures/2026-11-04-stability/dark/04-throughput-vs-p99-dark.png)
 
-![Five-run reproducibility](figures/2026-11-04-stability/05-reproducibility-dark.png)
+![Five-run reproducibility](figures/2026-11-04-stability/dark/05-reproducibility-dark.png)
 
-![Client-observed HTTP latency](figures/2026-11-04-stability/07-wrk-latency-dark.png)
+![Client-observed HTTP latency](figures/2026-11-04-stability/dark/07-wrk-latency-dark.png)
 
 ---
 
